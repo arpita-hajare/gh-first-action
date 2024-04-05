@@ -1,0 +1,20 @@
+name: ASP.NET Build
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.0.2
+      
+    - name: Restore NuGet packages
+      run: nuget restore aspnet-core-dotnet-core.sln
+      
+    - name: Build solution
+      run: msbuild /p:Configuration=Release aspnet-core-dotnet-core.sln
