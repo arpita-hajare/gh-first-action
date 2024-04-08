@@ -4,17 +4,20 @@ on: workflow_dispatch
 
 jobs:
   build:
-    runs-on: windows-latest
-    
+
+    runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1.0.2
-      
-    #- name: Restore NuGet packages
-      #run: nuget restore aspnet-core-dotnet-core.sln
-      
-    - name: Build solution
-      run: msbuild /p:Configuration=Release aspnet-core-dotnet-core.sln
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'
+        include-prerelease: true
+
+    - name: Build with dotnet
+      run: dotnet build ./aspnet-core-dotnet-core.sln --configuration Release
+    
+    - name: Test with dotnet
+      run: dotnet test ./aspnet-core-dotnet-core.sln --configuration Release
+
